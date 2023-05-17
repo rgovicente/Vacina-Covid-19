@@ -1,0 +1,126 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+#define MAX_SIZE 100
+
+struct Pessoa {
+    char nome[MAX_SIZE];
+    int idade;
+    char cpf[MAX_SIZE];
+    int dose1;
+    int dose2;
+};
+
+struct Pessoa pessoas[MAX_SIZE];
+int total_pessoas = 0;
+
+void cadastrar_pessoa() {
+    if (total_pessoas == MAX_SIZE) {
+        printf("O limite máximo de pessoas foi atingido.\n");
+        return;
+    }
+
+    struct Pessoa nova_pessoa;
+
+    printf("Digite o nome completo da pessoa: ");
+    scanf("%s", nova_pessoa.nome);
+
+    printf("Digite a idade da pessoa: ");
+    scanf("%d", &nova_pessoa.idade);
+
+    printf("Digite o CPF da pessoa: ");
+    scanf("%s", nova_pessoa.cpf);
+
+    nova_pessoa.dose1 = 0;
+    nova_pessoa.dose2 = 0;
+
+    pessoas[total_pessoas++] = nova_pessoa;
+
+    printf("Pessoa cadastrada com sucesso.\n");
+}
+
+void listar_pessoas() {
+    printf("Pessoas cadastradas:\n");
+
+    for (int i = 0; i < total_pessoas; i++) {
+        printf("Nome: %s\n", pessoas[i].nome);
+        printf("Idade: %d\n", pessoas[i].idade);
+        printf("CPF: %s\n", pessoas[i].cpf);
+        printf("Dose 1: %d\n", pessoas[i].dose1);
+        printf("Dose 2: %d\n", pessoas[i].dose2);
+        printf("\n");
+    }
+}
+
+void aplicar_dose() {
+    char cpf[MAX_SIZE];
+    int dose;
+
+    printf("Digite o CPF da pessoa: ");
+    scanf("%s", cpf);
+
+    printf("Digite o número da dose (1 ou 2): ");
+    scanf("%d", &dose);
+
+    int encontrou_pessoa = 0;
+
+    for (int i = 0; i < total_pessoas; i++) {
+        if (strcmp(pessoas[i].cpf, cpf) == 0) {
+            encontrou_pessoa = 1;
+
+            if (dose == 1) {
+                pessoas[i].dose1 = 1;
+                printf("Dose 1 aplicada com sucesso.\n");
+            } else if (dose == 2) {
+                pessoas[i].dose2 = 1;
+                printf("Dose 2 aplicada com sucesso.\n");
+            } else {
+                printf("Número de dose inválido.\n");
+                return;
+            }
+
+            break;
+        }
+    }
+
+    if (!encontrou_pessoa) {
+        printf("Pessoa não encontrada.\n");
+    }
+}
+
+int main() {
+    int opcao;
+
+    do {
+        printf("Sistema de vacinação COVID-19\n");
+        printf("1 - Cadastrar pessoa\n");
+        printf("2 - Listar pessoas cadastradas\n");
+        printf("3 - Aplicar dose\n");
+        printf("4 - Sair\n");
+        printf("Digite a opção desejada: ");
+        scanf("%d", &opcao);
+
+        switch (opcao) {
+            case 1:
+                cadastrar_pessoa();
+                break;
+            case 2:
+                listar_pessoas();
+                break;
+            case 3:
+                aplicar_dose();
+                break;
+            case 4:
+                printf("Saindo...\n");
+                break;
+            default:
+                printf("Opção inválida.\n");
+                break;
+        }
+
+        printf("\n");
+    } while (opcao != 4);
+
+    return 0;
+}
